@@ -12,7 +12,7 @@ from src.llm_streaming_client.config.config import CONFIG
 class LLMStreamingClient:
     """Simplified client for the llm_streaming."""
 
-    def __init__(self, base_url: Optional[str], timeout: int = CONFIG.TIMEOUT) -> None:
+    def __init__(self, base_url: Optional[str] = CONFIG.BASE_URL, timeout: int = CONFIG.TIMEOUT) -> None:
         """
         Initialize the client.
         
@@ -20,7 +20,7 @@ class LLMStreamingClient:
             base_url: Base URL of the service
             timeout: Maximum wait time for requests
         """
-        self.base_url = base_url if base_url else CONFIG.BASE_URL
+        self.base_url = base_url
         self.config_adapter = ConfigAdapter(timeout=timeout, base_url=self.base_url)
         self.config_audio_adapter = ConfigAudioAdapter(timeout=timeout, base_url=self.base_url)
         self.server_request_adapter = ServerRequestAdapter(timeout=timeout, base_url=self.base_url)
