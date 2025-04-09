@@ -9,6 +9,7 @@ setup(
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     install_requires=[
+        'setuptools',
         'requests==2.32.3',
         'python-dotenv==1.0.1',
         'python-socketio==5.12.1'
