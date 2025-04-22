@@ -1,13 +1,23 @@
 from typing import BinaryIO, Union, List, Dict, Any, Optional, Callable
 from .adapter.http_client import HttpClient
-from .dtos.request import POSTFile, GETFile, PUTFile, DELETEFile, GETStructure
-from .dtos.response import FileEntity
 from .adapter.server_request_adapter import ServerRequestAdapter
 from .adapter.config_audio_adapter import ConfigAudioAdapter
 from .adapter.config_adapter import ConfigAdapter
 from .adapter.socket_client import SocketAdapter
 from typing import Dict, Any, Optional
 from src.llm_streaming_client.config.config import CONFIG
+from .dtos.output import (
+    StatusOutputDTO, AvailableModelsOutputDTO, 
+    AvailableLLMsOutputDTO, AvailablePromptsOutputDTO,
+    AudioTranscriptionOutputDTO
+)
+from .dtos.input import StreamingInputDTO, MessageInputDTO
+from .dtos.core_dto import EMessageType
+from src.llm_streaming_client.enums.action_keys import ActionKeys
+from src.llm_streaming_client.enums.language_keys import LanguageEnum
+from src.llm_streaming_client.dtos.prompt_dto import PromptTemplate
+from src.llm_streaming_client.dtos.core_dto import IMessage
+
 
 class LLMStreamingClient:
     """Simplified client for the llm_streaming."""
@@ -26,7 +36,7 @@ class LLMStreamingClient:
         self.server_request_adapter = ServerRequestAdapter(timeout=timeout, base_url=self.base_url)
         self.socket_adapter = SocketAdapter(timeout=timeout, base_url=self.base_url)
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> StatusOutputDTO:
         """
         Get the status of the service.
 
@@ -35,7 +45,7 @@ class LLMStreamingClient:
         """
         return self.config_adapter.status()
 
-    def get_models(self) -> Dict[str, Any]:
+    def get_models(self) -> AvailableModelsOutputDTO:
         """
         Get the list of available models.
 
@@ -44,7 +54,7 @@ class LLMStreamingClient:
         """
         return self.config_adapter.get_available_models()
 
-    def get_llms(self) -> Dict[str, Any]:
+    def get_llms(self) -> AvailableLLMsOutputDTO:
         """
         Get the list of available LLMs.
 
@@ -53,7 +63,7 @@ class LLMStreamingClient:
         """
         return self.config_adapter.get_available_llms()
 
-    def get_prompts(self) -> List[Dict[str, Any]]:
+    def get_prompts(self) -> AvailablePromptsOutputDTO:
         """
         Get the list of available prompts with their metadata.
 
@@ -62,7 +72,7 @@ class LLMStreamingClient:
         """
         return self.config_adapter.get_available_prompts()
     
-    def transcribe_audio(self, audio_service: str, audio_url: str) -> Dict[str, Any]:
+    def transcribe_audio(self, audio_service: str, audio_url: str) -> AudioTranscriptionOutputDTO:
         """
         Transcribe an audio file using the specified audio service.
 
@@ -77,10 +87,11 @@ class LLMStreamingClient:
     
     def handle_request(
         self,
-        text: Optional[str],
-        action_key: str,
-        llm_name: Optional[str] = None,
-        model_name: Optional[str] = None,
+        text: str,
+        action_key: ActionKeys,
+        llm_name: str = "openai",
+        model_name: str = "gpt-4o-mini",
+        language: LanguageEnum = LanguageEnum.SPANISH,
         image_object: Optional[Any] = None,
     ) -> Dict[str, Any]:
         """
@@ -96,19 +107,25 @@ class LLMStreamingClient:
         Returns:
             A dictionary containing the response from the LLM service.
         """
-        return self.server_request_adapter.handle_request(
-            text=text,
-            action_key=action_key,
+        dto = MessageInputDTO(
             llm_name=llm_name,
             model_name=model_name,
+            text=text or "",
+            language=(LanguageEnum(language) if isinstance(language, str) else language),
+            action_key=(ActionKeys(action_key) if isinstance(action_key, str) else action_key),
             image_object=image_object,
         )
+        return self.server_request_adapter.handle_request(dto)
     
     def send_messages_via_socket(
         self,
         messages: List[Dict[str, Any]],
         llm: Optional[str] = "openai",
         model: Optional[str] = "gpt-4o-mini",
+        language: Optional[LanguageEnum] = LanguageEnum.SPANISH,
+        action_key: Optional[ActionKeys] = ActionKeys.DEFAULT,
+        prompt: Optional[PromptTemplate] = None,
+        image_object: Optional[Any] = None,
     ) -> None:
         """
         Sends messages to the Socket.IO server using the socket adapter.
@@ -119,5 +136,23 @@ class LLMStreamingClient:
             llm (str, optional): The LLM provider name. Defaults to "openai".
             model (str, optional): The model name. Defaults to "gpt-4o-mini".
         """
-        self.socket_adapter.send_messages(messages, llm, model)
+        imessages: List[IMessage] = [
+            IMessage(
+                id=m["id"],
+                content=m["content"],
+                type=EMessageType(m["type"]),
+                timestamp=m["timestamp"],
+            )
+            for m in messages
+        ]
+        dto = StreamingInputDTO(
+                    llm_name=llm,
+                    model_name=model,
+                    messages=imessages,
+                    prompt=prompt,      
+                    language=language,
+                    action_key=action_key,
+                    image_object=image_object,
+                )
+        self.socket_adapter.send_messages(dto)
     

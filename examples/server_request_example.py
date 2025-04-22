@@ -31,8 +31,8 @@ def main():
 
     try:
         action_key = "extract"
-        llm_name = "openai"
-        model_name = "gpt-4o-mini"
+        llm_name = "google"
+        model_name = "gemini-2.0-flash"
 
         image_path = os.path.join(os.path.dirname(__file__), "example_image.png")
         with open(image_path, "rb") as image_file:

@@ -2,7 +2,6 @@ from typing import Dict, Any, Optional
 import requests
 from io import BytesIO
 from .exceptions import FileManagerAdapterException
-from ..dtos.dto import FileResponse
 from src.llm_streaming_client.config.config import CONFIG
 
 class HttpClient:
