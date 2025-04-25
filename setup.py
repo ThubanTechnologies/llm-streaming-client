@@ -5,7 +5,7 @@ setup(
     version='0.1.0',
     author='ThubanTech',
     author_email='aortiz@thubantech.com',
-    description='A simplified client for file management services.',
+    description='A simplified client for llm-streaming services.',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     install_requires=[

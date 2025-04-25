@@ -1,3 +1,3 @@
 from .client import LLMStreamingClient
 
-__all__ = ['FileManagerClient']
+__all__ = ['LLMStreamingClient']

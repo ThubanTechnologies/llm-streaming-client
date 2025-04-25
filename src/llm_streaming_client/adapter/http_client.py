@@ -5,7 +5,7 @@ from .exceptions import LLMStreamingException
 from src.llm_streaming_client.config.config import CONFIG
 
 class HttpClient:
-    """HTTP client for making requests to the file manager service."""
+    """HTTP client for making requests to the llm-streaming service."""
     
     def __init__(self, timeout: int = CONFIG.TIMEOUT) -> None:
         self.timeout: int = timeout

@@ -3,7 +3,7 @@ from .http_client import HttpClient
 from src.llm_streaming_client.config.config import CONFIG
 
 class ConfigAdapter(HttpClient):
-    """Adapter to interact with the file management microservice paths."""
+    """Adapter to interact with the configuration microservice paths."""
 
     def __init__(self, base_url: str, timeout: int = CONFIG.TIMEOUT) -> None:
         super().__init__(timeout=timeout)
