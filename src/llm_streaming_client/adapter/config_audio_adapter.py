@@ -24,4 +24,4 @@ class ConfigAudioAdapter(HttpClient):
                 return response
         except Exception as e:
             print("Error during the POST request:", e)
-            raise
+            raise RuntimeError(f"Failed to transcribe audio: {e}") from e
