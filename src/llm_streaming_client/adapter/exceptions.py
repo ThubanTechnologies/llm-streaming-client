@@ -1,27 +1,20 @@
-class FileManagerAdapterException(Exception):
-    """Base class for exceptions in the File Manager Adapter."""
-    pass
+class LLMStreamingException(Exception):
+    """Base exception for LLM Streaming errors."""
+    default_message = "An unexpected error occurred"
 
-class FileNotFoundException(FileManagerAdapterException):
-    """Exception raised when a file is not found."""
-    def __init__(self, message="File not found."):
-        self.message: str = message
-        super().__init__(self.message)
+    def __init__(self, message: str = None, error: Exception = None):
+        self.original_error = error
+        self.message = message or self.default_message
 
-class FileUploadException(FileManagerAdapterException):
-    """Exception raised for errors during file upload."""
-    def __init__(self, message="Error occurred while uploading the file."):
-        self.message: str = message
-        super().__init__(self.message)
+        final_message = f"{self.message}: {str(error)}" if error else self.message
 
-class FileUpdateException(FileManagerAdapterException):
-    """Exception raised for errors during file update."""
-    def __init__(self, message="Error occurred while updating the file."):
-        self.message: str = message
-        super().__init__(self.message)
+        super().__init__(final_message)
 
-class FileDeletionException(FileManagerAdapterException):
-    """Exception raised for errors during file deletion."""
-    def __init__(self, message="Error occurred while deleting the file."):
-        self.message: str = message
-        super().__init__(self.message)
+class AudioTranscriptionException(LLMStreamingException):
+    default_message = "Failed to transcribe audio"
+
+class RequestHandlingException(LLMStreamingException):
+    default_message = "Failed to handle request to LLM service"
+
+class SocketCommunicationException(LLMStreamingException):
+    default_message = "Socket communication error"

@@ -2,6 +2,7 @@ import socketio
 from typing import List
 from src.llm_streaming_client.config.config import CONFIG
 from src.llm_streaming_client.dtos.input import StreamingInputDTO
+from src.llm_streaming_client.adapter.exceptions import SocketCommunicationException
 
 class SocketAdapter:
     """Adapter to interact with the Socket.IO server using StreamingInputDTO."""
@@ -72,7 +73,7 @@ class SocketAdapter:
             self.sio.wait()
 
         except Exception as e:
-            print(f"An error occurred: {e}")
+            raise SocketCommunicationException(error=e)
         finally:
             if self.sio.connected:
                 self.sio.disconnect()

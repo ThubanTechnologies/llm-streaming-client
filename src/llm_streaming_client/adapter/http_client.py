@@ -1,7 +1,7 @@
 from typing import Dict, Any, Optional
 import requests
 from io import BytesIO
-from .exceptions import FileManagerAdapterException
+from .exceptions import LLMStreamingException
 from src.llm_streaming_client.config.config import CONFIG
 
 class HttpClient:
@@ -24,7 +24,7 @@ class HttpClient:
             return response
         except requests.exceptions.RequestException as e:
             error_msg: str = f"HTTP {method} request to {url} failed: {str(e)}"
-            raise FileManagerAdapterException(error_msg) from e
+            raise LLMStreamingException(error_msg) from e
 
     def _get(self, url: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
