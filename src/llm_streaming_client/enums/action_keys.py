@@ -1,3 +1,4 @@
+# This enum has been extracted from the LLM_Streaming microservice.
 from enum import Enum
 
 

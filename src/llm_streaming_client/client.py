@@ -78,7 +78,7 @@ class LLMStreamingClient:
 
         Args:
             audio_service: The name of the audio service to use.
-            audio_file: The audio file in binary format.
+            audio_url: The audio file in binary format.
 
         Returns:
             A dictionary containing the transcription result.
@@ -131,10 +131,13 @@ class LLMStreamingClient:
         Sends messages to the Socket.IO server using the socket adapter.
 
         Args:
-            url (str): The URL of the Socket.IO server.
             messages (list): A list of messages to send.
             llm (str, optional): The LLM provider name. Defaults to "openai".
             model (str, optional): The model name. Defaults to "gpt-4o-mini".
+            language (LanguageEnum, optional): The language to use.
+            action_key (ActionKeys, optional): The action key for the request.
+            prompt (PromptTemplate, optional): The prompt template.
+            image_object (Any, optional): Optional image object for the request.
         """
         imessages: List[IMessage] = [
             IMessage(

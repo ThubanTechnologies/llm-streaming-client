@@ -1,3 +1,4 @@
+# These DTOs have been extracted from the LLM_Streaming microservice to ensure consistency across projects.
 from dataclasses import dataclass
 from typing import List, Optional
 from src.llm_streaming_client.dtos.core_dto import IMessage

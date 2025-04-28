@@ -1,8 +1,4 @@
-"""
-Module for language enumeration types.
-Provides standardized language codes and mappings for the application.
-"""
-
+# This enum has been extracted from the LLM_Streaming microservice project.
 from enum import Enum
 from typing import Dict, Optional
 

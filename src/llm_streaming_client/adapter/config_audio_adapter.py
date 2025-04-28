@@ -1,5 +1,7 @@
 from typing import Dict, Any
 from .http_client import HttpClient
+import mimetypes
+import os
 from src.llm_streaming_client.config.config import CONFIG
 from src.llm_streaming_client.adapter.exceptions import AudioTranscriptionException
 
@@ -17,8 +19,11 @@ class ConfigAudioAdapter(HttpClient):
         """
         url = self.base_url + self._config["audio"]
         try:
+            mime_type, _ = mimetypes.guess_type(audio_url)
+            if not mime_type:
+                mime_type = "application/octet-stream" 
             with open(audio_url, "rb") as audio_file:
-                files = {"audio": (audio_url, audio_file, "audio/wav")}
+                files = {"audio": (audio_url, audio_file, mime_type)}
                 data = {"audio_service": audio_service}
                 response = self._post(url, files=files, data=data)
                 return response

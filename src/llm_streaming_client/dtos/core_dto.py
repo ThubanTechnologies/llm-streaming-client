@@ -1,3 +1,4 @@
+# These DTOs have been extracted from the LLM_Streaming microservice to ensure consistency across projects.
 from dataclasses import dataclass
 import datetime
 from enum import Enum

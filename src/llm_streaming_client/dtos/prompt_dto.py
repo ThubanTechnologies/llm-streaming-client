@@ -1,5 +1,5 @@
+# These DTOs have been extracted from the LLM_Streaming microservice to ensure consistency across projects.
 from dataclasses import dataclass
-from typing import List
 from src.llm_streaming_client.enums.language_keys import LanguageEnum
 
 @dataclass
@@ -20,9 +20,3 @@ class PromptTemplate:
             f"\ttemperature={self.temperature}\n"
             f")"
         )
-
-    def append_language(self, language: LanguageEnum) -> None:
-        """
-        Adds language information to the prompt content.
-        """
-        self.description += f"\n\n Output Language: {language.value}"

@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='llm_streaming-client',
-    version='0.1.0',
-    author='ThubanTech',
-    author_email='aortiz@thubantech.com',
+    version='1.0.0',
+    author='Alba Marco Ugarte',
+    author_email='amarco@thubantech.com',
     description='A simplified client for llm-streaming services.',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
