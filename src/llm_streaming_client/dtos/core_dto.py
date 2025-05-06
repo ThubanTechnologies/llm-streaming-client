@@ -4,9 +4,9 @@ import datetime
 from enum import Enum
 from typing import List, Optional
 
-from src.llm_streaming_client.dtos.prompt_dto import PromptTemplate
-from src.llm_streaming_client.enums.language_keys import LanguageEnum
-from src.llm_streaming_client.enums.action_keys import ActionKeys
+from llm_streaming_client.dtos.prompt_dto import PromptTemplate
+from llm_streaming_client.enums.language_keys import LanguageEnum
+from llm_streaming_client.enums.action_keys import ActionKeys
 
 
 class EMessageType(Enum):

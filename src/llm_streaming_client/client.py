@@ -5,7 +5,7 @@ from .adapter.config_audio_adapter import ConfigAudioAdapter
 from .adapter.config_adapter import ConfigAdapter
 from .adapter.socket_client import SocketAdapter
 from typing import Dict, Any, Optional
-from src.llm_streaming_client.config.config import CONFIG
+from .config.config import CONFIG
 from .dtos.output import (
     StatusOutputDTO, AvailableModelsOutputDTO, 
     AvailableLLMsOutputDTO, AvailablePromptsOutputDTO,
@@ -13,10 +13,10 @@ from .dtos.output import (
 )
 from .dtos.input import StreamingInputDTO, MessageInputDTO
 from .dtos.core_dto import EMessageType
-from src.llm_streaming_client.enums.action_keys import ActionKeys
-from src.llm_streaming_client.enums.language_keys import LanguageEnum
-from src.llm_streaming_client.dtos.prompt_dto import PromptTemplate
-from src.llm_streaming_client.dtos.core_dto import IMessage
+from .enums.action_keys import ActionKeys
+from .enums.language_keys import LanguageEnum
+from .dtos.prompt_dto import PromptTemplate
+from .dtos.core_dto import IMessage
 
 
 class LLMStreamingClient:
