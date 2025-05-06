@@ -2,8 +2,8 @@ from typing import Dict, Any
 from .http_client import HttpClient
 import mimetypes
 import os
-from src.llm_streaming_client.config.config import CONFIG
-from src.llm_streaming_client.adapter.exceptions import AudioTranscriptionException
+from ..config.config import CONFIG
+from ..adapter.exceptions import AudioTranscriptionException
 
 class ConfigAudioAdapter(HttpClient):
     """Adapter to interact with the audio transcription microservice paths."""

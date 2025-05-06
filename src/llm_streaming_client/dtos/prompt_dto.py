@@ -1,6 +1,6 @@
 # These DTOs have been extracted from the LLM_Streaming microservice to ensure consistency across projects.
 from dataclasses import dataclass
-from llm_streaming_client.enums.language_keys import LanguageEnum
+from ..enums.language_keys import LanguageEnum
 
 @dataclass
 class PromptTemplate:

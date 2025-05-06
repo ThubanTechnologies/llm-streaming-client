@@ -1,8 +1,8 @@
 from typing import Dict, Any, Optional
 from .http_client import HttpClient
-from src.llm_streaming_client.config.config import CONFIG
-from src.llm_streaming_client.dtos.input import MessageInputDTO
-from src.llm_streaming_client.adapter.exceptions import RequestHandlingException
+from ..config.config import CONFIG
+from ..dtos.input import MessageInputDTO
+from ..adapter.exceptions import RequestHandlingException
 
 class ServerRequestAdapter(HttpClient):
     """Adapter to interact with the request handling microservice paths."""

@@ -2,7 +2,7 @@ from typing import Dict, Any, Optional
 import requests
 from io import BytesIO
 from .exceptions import LLMStreamingException
-from src.llm_streaming_client.config.config import CONFIG
+from ..config.config import CONFIG
 
 class HttpClient:
     """HTTP client for making requests to the llm-streaming service."""

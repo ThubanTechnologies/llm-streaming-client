@@ -1,6 +1,6 @@
 from typing import Dict, Any, List
 from .http_client import HttpClient
-from src.llm_streaming_client.config.config import CONFIG
+from ..config.config import CONFIG
 
 class ConfigAdapter(HttpClient):
     """Adapter to interact with the configuration microservice paths."""

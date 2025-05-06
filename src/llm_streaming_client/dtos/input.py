@@ -1,10 +1,10 @@
 # These DTOs have been extracted from the LLM_Streaming microservice to ensure consistency across projects.
 from dataclasses import dataclass
 from typing import List, Optional
-from llm_streaming_client.dtos.core_dto import IMessage
-from llm_streaming_client.enums.action_keys import ActionKeys
-from llm_streaming_client.dtos.prompt_dto import PromptTemplate
-from llm_streaming_client.enums.language_keys import LanguageEnum
+from ..dtos.core_dto import IMessage
+from ..enums.action_keys import ActionKeys
+from ..dtos.prompt_dto import PromptTemplate
+from ..enums.language_keys import LanguageEnum
 
 
 @dataclass

@@ -1,8 +1,7 @@
 import socketio
-from typing import List
-from src.llm_streaming_client.config.config import CONFIG
-from src.llm_streaming_client.dtos.input import StreamingInputDTO
-from src.llm_streaming_client.adapter.exceptions import SocketCommunicationException
+from ..config.config import CONFIG
+from ..dtos.input import StreamingInputDTO
+from ..adapter.exceptions import SocketCommunicationException
 
 class SocketAdapter:
     """Adapter to interact with the Socket.IO server using StreamingInputDTO."""
