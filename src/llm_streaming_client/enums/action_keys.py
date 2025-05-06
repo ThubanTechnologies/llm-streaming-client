@@ -14,9 +14,12 @@ class ActionKeys(Enum):
         SUMMARIZE : Used to summarize documents.
         IMAGE_EXTRACTION : Used to extract text and tables from an image and return them in JSON format.
         IMAGE_DESCRIPTION : Used to generate a descriptive text for an image.
+        SPARQL_QUERY : Used to execute a SPARQL query.
     """
 
     DEFAULT = "default"
     SUMMARIZE = "summarize"
     IMAGE_EXTRACTION = "extract"
     IMAGE_DESCRIPTION = "describe"
+    SPARQL_QUERY = "sparql_query"
+    
