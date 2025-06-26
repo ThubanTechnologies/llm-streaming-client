@@ -22,4 +22,5 @@ class ActionKeys(Enum):
     IMAGE_EXTRACTION = "extract"
     IMAGE_DESCRIPTION = "describe"
     SPARQL_QUERY = "sparql_query"
-    
+    TOPIC_CLASSIFIER = "topic_classifier"
+    ASSISTANT = "assistant"
