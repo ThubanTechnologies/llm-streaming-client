@@ -36,3 +36,4 @@ class MessageInputDTO:
     language: LanguageEnum
     action_key: ActionKeys
     image_object: Optional[str] = None
+    session_id: Optional[str] = None

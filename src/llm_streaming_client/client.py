@@ -7,9 +7,11 @@ from .adapter.socket_client import SocketAdapter
 from typing import Dict, Any, Optional
 from .config.config import CONFIG
 from .dtos.output import (
-    StatusOutputDTO, AvailableModelsOutputDTO, 
-    AvailableLLMsOutputDTO, AvailablePromptsOutputDTO,
-    AudioTranscriptionOutputDTO
+    StatusOutputDTO,
+    AvailableModelsOutputDTO,
+    AvailableLLMsOutputDTO,
+    AvailablePromptsOutputDTO,
+    AudioTranscriptionOutputDTO,
 )
 from .dtos.input import StreamingInputDTO, MessageInputDTO
 from .dtos.core_dto import EMessageType
@@ -22,18 +24,24 @@ from .dtos.core_dto import IMessage
 class LLMStreamingClient:
     """Simplified client for the llm_streaming."""
 
-    def __init__(self, base_url: Optional[str] = CONFIG.BASE_URL, timeout: int = CONFIG.TIMEOUT) -> None:
+    def __init__(
+        self, base_url: Optional[str] = CONFIG.BASE_URL, timeout: int = CONFIG.TIMEOUT
+    ) -> None:
         """
         Initialize the client.
-        
+
         Args:
             base_url: Base URL of the service
             timeout: Maximum wait time for requests
         """
         self.base_url = base_url
         self.config_adapter = ConfigAdapter(timeout=timeout, base_url=self.base_url)
-        self.config_audio_adapter = ConfigAudioAdapter(timeout=timeout, base_url=self.base_url)
-        self.server_request_adapter = ServerRequestAdapter(timeout=timeout, base_url=self.base_url)
+        self.config_audio_adapter = ConfigAudioAdapter(
+            timeout=timeout, base_url=self.base_url
+        )
+        self.server_request_adapter = ServerRequestAdapter(
+            timeout=timeout, base_url=self.base_url
+        )
         self.socket_adapter = SocketAdapter(timeout=timeout, base_url=self.base_url)
 
     def get_status(self) -> StatusOutputDTO:
@@ -71,8 +79,10 @@ class LLMStreamingClient:
             List of dictionaries containing prompt metadata.
         """
         return self.config_adapter.get_available_prompts()
-    
-    def transcribe_audio(self, audio_service: str, audio_url: str) -> AudioTranscriptionOutputDTO:
+
+    def transcribe_audio(
+        self, audio_service: str, audio_url: str
+    ) -> AudioTranscriptionOutputDTO:
         """
         Transcribe an audio file using the specified audio service.
 
@@ -84,7 +94,7 @@ class LLMStreamingClient:
             A dictionary containing the transcription result.
         """
         return self.config_audio_adapter.transcribe_audio(audio_service, audio_url)
-    
+
     def handle_request(
         self,
         text: str,
@@ -93,6 +103,7 @@ class LLMStreamingClient:
         model_name: str = "gpt-4o-mini",
         language: LanguageEnum = LanguageEnum.SPANISH,
         image_object: Optional[Any] = None,
+        session_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Handle a request to the LLM service.
@@ -103,6 +114,7 @@ class LLMStreamingClient:
             llm_name: The name of the LLM to use (default: "openai").
             model_name: The name of the model to use (default: "gpt-4o-mini").
             image_object: Optional image object for the request.
+            session_id: Optional session ID for the request.
 
         Returns:
             A dictionary containing the response from the LLM service.
@@ -111,12 +123,17 @@ class LLMStreamingClient:
             llm_name=llm_name,
             model_name=model_name,
             text=text or "",
-            language=(LanguageEnum(language) if isinstance(language, str) else language),
-            action_key=(ActionKeys(action_key) if isinstance(action_key, str) else action_key),
+            language=(
+                LanguageEnum(language) if isinstance(language, str) else language
+            ),
+            action_key=(
+                ActionKeys(action_key) if isinstance(action_key, str) else action_key
+            ),
             image_object=image_object,
+            session_id=session_id,
         )
         return self.server_request_adapter.handle_request(dto)
-    
+
     def send_messages_via_socket(
         self,
         messages: List[Dict[str, Any]],
@@ -149,13 +166,12 @@ class LLMStreamingClient:
             for m in messages
         ]
         dto = StreamingInputDTO(
-                    llm_name=llm,
-                    model_name=model,
-                    messages=imessages,
-                    prompt=prompt,      
-                    language=language,
-                    action_key=action_key,
-                    image_object=image_object,
-                )
+            llm_name=llm,
+            model_name=model,
+            messages=imessages,
+            prompt=prompt,
+            language=language,
+            action_key=action_key,
+            image_object=image_object,
+        )
         self.socket_adapter.send_messages(dto)
-    
