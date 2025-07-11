@@ -33,6 +33,7 @@ class MessageInputDTO:
     llm_name: str
     model_name: str
     text: str
+    context: Optional[str] = None
     language: LanguageEnum
     action_key: ActionKeys
     image_object: Optional[str] = None

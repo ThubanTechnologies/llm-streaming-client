@@ -33,6 +33,7 @@ class ServerRequestAdapter(HttpClient):
                 "llm_name": dto.llm_name,
                 "model_name": dto.model_name,
                 "text": dto.text,
+                "context": dto.context,
                 "language": dto.language.value,
                 "actionKey": dto.action_key.value,
             }
