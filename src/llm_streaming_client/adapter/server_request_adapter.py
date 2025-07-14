@@ -33,7 +33,6 @@ class ServerRequestAdapter(HttpClient):
                 "llm_name": dto.llm_name,
                 "model_name": dto.model_name,
                 "text": dto.text,
-                "context_info": dto.context_info,
                 "language": dto.language.value,
                 "actionKey": dto.action_key.value,
             }
@@ -41,6 +40,8 @@ class ServerRequestAdapter(HttpClient):
                 data["image"] = dto.image_object
             if dto.session_id:
                 data["session_id"] = dto.session_id
+            if dto.context_info:
+                data["context_info"] = dto.context_info
 
             url = self.base_url + self._config["request"]
             return self._post(url, json=data)
