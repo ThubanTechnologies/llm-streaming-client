@@ -124,7 +124,7 @@ class LLMStreamingClient:
             llm_name=llm_name,
             model_name=model_name,
             text=text or "",
-            context_info=context_info or "",
+            context_info=context_info,
             language=(
                 LanguageEnum(language) if isinstance(language, str) else language
             ),
