@@ -104,6 +104,7 @@ class LLMStreamingClient:
         language: LanguageEnum = LanguageEnum.SPANISH,
         image_object: Optional[Any] = None,
         session_id: Optional[str] = None,
+        context_info: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Handle a request to the LLM service.
@@ -131,6 +132,7 @@ class LLMStreamingClient:
             ),
             image_object=image_object,
             session_id=session_id,
+            context_info=context_info,
         )
         return self.server_request_adapter.handle_request(dto)
 

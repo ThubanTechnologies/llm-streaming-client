@@ -37,3 +37,4 @@ class MessageInputDTO:
     action_key: ActionKeys
     image_object: Optional[str] = None
     session_id: Optional[str] = None
+    context_info: Optional[str] = None
