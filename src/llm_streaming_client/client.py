@@ -102,6 +102,7 @@ class LLMStreamingClient:
         llm_name: str = "openai",
         model_name: str = "gpt-4o-mini",
         language: LanguageEnum = LanguageEnum.SPANISH,
+        context_info: Optional[str] = None,
         image_object: Optional[Any] = None,
         session_id: Optional[str] = None,
     ) -> Dict[str, Any]:
@@ -123,6 +124,7 @@ class LLMStreamingClient:
             llm_name=llm_name,
             model_name=model_name,
             text=text or "",
+            context_info=context_info,
             language=(
                 LanguageEnum(language) if isinstance(language, str) else language
             ),
