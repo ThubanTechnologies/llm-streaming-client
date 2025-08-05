@@ -24,9 +24,9 @@ class HttpClient:
         """Build successful response structure."""
         json_response = response.json()
         return {
-            "status": "success",
+            "success": True,
             "response": json_response.get("response"),
-            "error_message": None,
+            "error": None,
         }
 
     def _build_error_response(
@@ -34,7 +34,7 @@ class HttpClient:
     ) -> Dict[str, Any]:
         """Build error response structure."""
         error_message = self._extract_error_message(exception)
-        return {"status": "error", "response": None, "error_message": error_message}
+        return {"success": False, "response": None, "error": error_message}
 
     def _extract_error_message(
         self, exception: requests.exceptions.RequestException
