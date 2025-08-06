@@ -77,7 +77,7 @@ class PromptInfoDTO:
     """
 
     title: str
-    actionKey: str
+    action_key: str
 
 
 @dataclass

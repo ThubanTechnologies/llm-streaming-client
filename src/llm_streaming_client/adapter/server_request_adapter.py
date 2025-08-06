@@ -34,7 +34,7 @@ class ServerRequestAdapter(HttpClient):
                 "model_name": dto.model_name,
                 "text": dto.text,
                 "language": dto.language.value,
-                "actionKey": dto.action_key.value,
+                "action_key": dto.action_key.value,
             }
             if dto.image_object:
                 data["image"] = dto.image_object
