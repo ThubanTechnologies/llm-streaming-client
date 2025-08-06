@@ -3,6 +3,7 @@ from ..config.config import CONFIG
 from ..dtos.input import StreamingInputDTO
 from ..adapter.exceptions import SocketCommunicationException
 
+
 class SocketAdapter:
     """Adapter to interact with the Socket.IO server using StreamingInputDTO."""
 
@@ -15,23 +16,20 @@ class SocketAdapter:
             timeout: Maximum wait time for the connection (in seconds).
         """
         self.sio = socketio.Client(
-            reconnection_attempts=CONFIG.RECONNECT_ATTEMPTS,
-            request_timeout=timeout
+            reconnection_attempts=CONFIG.RECONNECT_ATTEMPTS, request_timeout=timeout
         )
         self.namespace = CONFIG.SOCKET_NAMESPACE
         self.timeout = timeout
         self.base_url = base_url
 
-    def send_messages(
-        self,
-        dto: StreamingInputDTO
-    ) -> None:
+    def send_messages(self, dto: StreamingInputDTO) -> None:
         """
         Sends a StreamingInputDTO to the Socket.IO server and streams the response tokens.
 
         Args:
             dto: A StreamingInputDTO containing messages, llm_name, model_name, action_key, language, etc.
         """
+
         @self.sio.on("response_message", namespace=self.namespace)
         def on_response_message(data):
             content = data.get("content", "")
@@ -62,7 +60,7 @@ class SocketAdapter:
                 "messages": messages_payload,
                 "llm_name": dto.llm_name,
                 "model_name": dto.model_name,
-                "actionKey": dto.action_key.value,
+                "action_key": dto.action_key.value,
                 "language": dto.language.value,
             }
             if dto.image_object:

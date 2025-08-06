@@ -1,7 +1,10 @@
 import pytest
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
+)
 from src.llm_streaming_client.adapter.socket_client import SocketAdapter
 from src.llm_streaming_client.dtos.input import StreamingInputDTO
 from src.llm_streaming_client.dtos.core_dto import IMessage, EMessageType
@@ -21,7 +24,7 @@ def test_send_messages_emits_correct_payload():
                 id="1",
                 content="Hola",
                 type=EMessageType.USER,
-                timestamp="2024-01-01T12:00:00Z"
+                timestamp="2024-01-01T12:00:00Z",
             )
         ],
         prompt=None,
@@ -45,11 +48,15 @@ def test_send_messages_emits_correct_payload():
             ],
             "llm_name": "openai",
             "model_name": "gpt-4o-mini",
-            "actionKey": "default",
+            "action_key": "default",
             "language": "spanish",
         }
 
-        mock_sio.connect.assert_called_once_with("http://mock-base-url", namespaces=[adapter.namespace])
-        mock_sio.emit.assert_called_once_with("send_message", expected_payload, namespace=adapter.namespace)
+        mock_sio.connect.assert_called_once_with(
+            "http://mock-base-url", namespaces=[adapter.namespace]
+        )
+        mock_sio.emit.assert_called_once_with(
+            "send_message", expected_payload, namespace=adapter.namespace
+        )
         mock_sio.wait.assert_called_once()
         mock_sio.disconnect.assert_called()

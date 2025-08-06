@@ -1,7 +1,10 @@
 import pytest
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
+)
 
 from src.llm_streaming_client.adapter.server_request_adapter import ServerRequestAdapter
 from src.llm_streaming_client.dtos.input import MessageInputDTO
@@ -17,7 +20,7 @@ def test_handle_request_sends_correct_payload(monkeypatch):
         text="Hola mundo",
         language=LanguageEnum.SPANISH,
         action_key=ActionKeys.DEFAULT,
-        image_object={"img": "mock"}
+        image_object={"img": "mock"},
     )
 
     expected_url = "http://mock-base-url" + adapter._config["request"]
@@ -26,7 +29,7 @@ def test_handle_request_sends_correct_payload(monkeypatch):
         "model_name": "gpt-4o-mini",
         "text": "Hola mundo",
         "language": "spanish",
-        "actionKey": "default",
+        "action_key": "default",
         "image": {"img": "mock"},
     }
     mock_response = {"result": "ok"}
