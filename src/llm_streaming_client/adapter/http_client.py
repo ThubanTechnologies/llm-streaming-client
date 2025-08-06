@@ -20,11 +20,6 @@ class HttpClient:
         except requests.exceptions.RequestException as e:
             return build_error_response(e)
 
-    def _make_raw_request(self, method: str, url: str, **kwargs) -> requests.Response:
-        """Make HTTP request and return raw response."""
-        response = self.session.request(method, url, timeout=self.timeout, **kwargs)
-        return response
-
     def _get(self, url: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Performs a GET request and returns the JSON response.
