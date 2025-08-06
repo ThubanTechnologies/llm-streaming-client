@@ -1,5 +1,4 @@
 from typing import BinaryIO, Union, List, Dict, Any, Optional, Callable
-from .adapter.http_client import HttpClient
 from .adapter.server_request_adapter import ServerRequestAdapter
 from .adapter.config_audio_adapter import ConfigAudioAdapter
 from .adapter.config_adapter import ConfigAdapter

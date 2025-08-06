@@ -45,5 +45,5 @@ class ServerRequestAdapter(HttpClient):
 
             url = self.base_url + self._config["request"]
             return self._post(url, json=data)
-        except Exception as e:
-            raise RequestHandlingException(error=e)
+        except Exception:
+            return {}
