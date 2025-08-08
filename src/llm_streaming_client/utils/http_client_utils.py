@@ -4,10 +4,10 @@ import requests
 
 def build_success_response(response: requests.Response) -> Dict[str, Any]:
     """Build successful response structure."""
-    json_response = response.json()
+
     return {
         "success": True,
-        "response": json_response.get("response"),
+        "response": response.json(),
         "error": None,
     }
 
