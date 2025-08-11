@@ -5,9 +5,12 @@ import requests
 def build_success_response(response: requests.Response) -> Dict[str, Any]:
     """Build successful response structure."""
     json_response = response.json()
+
+    if "response" in json_response:
+        json_response = json_response["response"]
     return {
         "success": True,
-        "response": json_response.get("response"),
+        "response": json_response,
         "error": None,
     }
 
