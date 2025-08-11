@@ -7,7 +7,7 @@ def build_success_response(response: requests.Response) -> Dict[str, Any]:
     json_response = response.json()
     return {
         "success": True,
-        "response": json_response.get("response"),
+        "response": json_response,
         "error": None,
     }
 
