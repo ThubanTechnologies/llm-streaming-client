@@ -137,19 +137,21 @@ class LLMStreamingClient:
 
     def send_messages_via_socket(
         self,
-        messages: List[Dict[str, Any]],
+        text: str,
+        action_key: ActionKeys = "default",
         llm: Optional[str] = "openai",
         model: Optional[str] = "gpt-4o-mini",
         language: Optional[LanguageEnum] = LanguageEnum.SPANISH,
-        action_key: Optional[ActionKeys] = ActionKeys.DEFAULT,
         prompt: Optional[PromptTemplate] = None,
         image_object: Optional[Any] = None,
+        session_id: Optional[str] = None,
+        on_token: Optional[Callable[[str, bool], None]] = None,
     ) -> None:
         """
         Sends messages to the Socket.IO server using the socket adapter.
 
         Args:
-            messages (list): A list of messages to send.
+            text (str): The input text for the request.
             llm (str, optional): The LLM provider name. Defaults to "openai".
             model (str, optional): The model name. Defaults to "gpt-4o-mini".
             language (LanguageEnum, optional): The language to use.
@@ -157,22 +159,17 @@ class LLMStreamingClient:
             prompt (PromptTemplate, optional): The prompt template.
             image_object (Any, optional): Optional image object for the request.
         """
-        imessages: List[IMessage] = [
-            IMessage(
-                id=m["id"],
-                content=m["content"],
-                type=EMessageType(m["type"]),
-                timestamp=m["timestamp"],
-            )
-            for m in messages
-        ]
+
         dto = StreamingInputDTO(
             llm_name=llm,
             model_name=model,
-            messages=imessages,
+            text=text,
             prompt=prompt,
             language=language,
-            action_key=action_key,
+            action_key=(
+                ActionKeys(action_key) if isinstance(action_key, str) else action_key
+            ),
             image_object=image_object,
+            session_id=session_id,
         )
-        self.socket_adapter.send_messages(dto)
+        self.socket_adapter.send_messages(dto, on_token=on_token)

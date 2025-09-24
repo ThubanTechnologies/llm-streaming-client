@@ -2,6 +2,7 @@ import socketio
 from ..config.config import CONFIG
 from ..dtos.input import StreamingInputDTO
 from ..adapter.exceptions import SocketCommunicationException
+from typing import Callable, Optional
 
 
 class SocketAdapter:
@@ -22,7 +23,11 @@ class SocketAdapter:
         self.timeout = timeout
         self.base_url = base_url
 
-    def send_messages(self, dto: StreamingInputDTO) -> None:
+    def send_messages(
+        self,
+        dto: StreamingInputDTO,
+        on_token: Optional[Callable[[str, bool], None]] = None,
+    ) -> None:
         """
         Sends a StreamingInputDTO to the Socket.IO server and streams the response tokens.
 
@@ -34,34 +39,35 @@ class SocketAdapter:
         def on_response_message(data):
             content = data.get("content", "")
             finished = data.get("finished", False)
-            print(content, end="", flush=True)
+            if on_token:
+                try:
+                    on_token(content, finished)
+                except Exception:
+                    pass
+            else:
+                print(content, end="", flush=True)
+
             if finished:
                 self.sio.disconnect()
 
         @self.sio.on("error", namespace=self.namespace)
         def on_error(data):
-            print(f"Error: {data}")
+            if on_token:
+                on_token(f"[ERROR] {data}", True)
+            else:
+                print(f"Error: {data}")
             self.sio.disconnect()
 
         try:
             self.sio.connect(self.base_url, namespaces=[self.namespace])
 
-            messages_payload = [
-                {
-                    "id": msg.id,
-                    "content": msg.content,
-                    "type": msg.type.value,
-                    "timestamp": msg.timestamp,
-                }
-                for msg in dto.messages
-            ]
-
             payload = {
-                "messages": messages_payload,
+                "text": dto.text,
                 "llm_name": dto.llm_name,
                 "model_name": dto.model_name,
                 "action_key": dto.action_key.value,
                 "language": dto.language.value,
+                "session_id": dto.session_id,
             }
             if dto.image_object:
                 payload["image_object"] = dto.image_object
@@ -70,6 +76,8 @@ class SocketAdapter:
             self.sio.wait()
 
         except Exception as e:
+            if on_token:
+                on_token(f"[EXCEPTION] {e}", True)
             raise SocketCommunicationException(error=e)
         finally:
             if self.sio.connected:
