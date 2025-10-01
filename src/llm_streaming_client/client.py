@@ -140,24 +140,30 @@ class LLMStreamingClient:
         text: str,
         action_key: ActionKeys = "default",
         llm: Optional[str] = "openai",
-        model: Optional[str] = "gpt-4o-mini",
+        model: Optional[str] = "gpt-4.1-nano",
         language: Optional[LanguageEnum] = LanguageEnum.SPANISH,
         prompt: Optional[PromptTemplate] = None,
         image_object: Optional[Any] = None,
         session_id: Optional[str] = None,
+        context_info: Optional[str] = None,
         on_token: Optional[Callable[[str, bool], None]] = None,
     ) -> None:
         """
-        Sends messages to the Socket.IO server using the socket adapter.
-
+        Send messages to the LLM service via Socket.IO and stream the response tokens.
         Args:
-            text (str): The input text for the request.
-            llm (str, optional): The LLM provider name. Defaults to "openai".
-            model (str, optional): The model name. Defaults to "gpt-4o-mini".
-            language (LanguageEnum, optional): The language to use.
-            action_key (ActionKeys, optional): The action key for the request.
-            prompt (PromptTemplate, optional): The prompt template.
-            image_object (Any, optional): Optional image object for the request.
+            text: The input text to send.
+            action_key: The action key to determine the type of request (default: "default").
+            llm: The name of the LLM to use (default: "openai").
+            model: The name of the model to use (default: "gpt-4o-mini").
+            language: The language of the input text (default: LanguageEnum.SPANISH).
+            prompt: Optional prompt template to use.
+            image_object: Optional image object for the request.
+            session_id: Optional session ID for the request.
+            context_info: Optional context information for the request.
+            on_token: Optional callback function to handle each token received. It should accept two parameters:
+                        the token content (str) and a boolean indicating if the stream is finished.
+        Returns:
+            None
         """
 
         dto = StreamingInputDTO(
@@ -171,5 +177,6 @@ class LLMStreamingClient:
             ),
             image_object=image_object,
             session_id=session_id,
+            context_info=context_info,
         )
         self.socket_adapter.send_messages(dto, on_token=on_token)

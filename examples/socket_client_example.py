@@ -19,10 +19,12 @@ if __name__ == "__main__":
     client = LLMStreamingClient(base_url, timeout)
     action_key = "assistant"
     session_id = "session12347"
+    context_info = "El clima actual en Madrid es soleado con 25 grados."
 
     texts = [
         "Hola, me llamo Pepito.",
         "¿Cómo me llamo?",
+        "¿Hace buen tiempo para ir en bicicleta?",
     ]
     for text in texts:
         client.send_messages_via_socket(
@@ -30,4 +32,5 @@ if __name__ == "__main__":
             on_token=token_printer,
             session_id=session_id,
             action_key=action_key,
+            context_info=context_info,
         )
