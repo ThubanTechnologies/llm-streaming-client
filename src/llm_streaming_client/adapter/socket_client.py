@@ -68,6 +68,7 @@ class SocketAdapter:
                 "action_key": dto.action_key.value,
                 "language": dto.language.value,
                 "session_id": dto.session_id,
+                "context_info": dto.context_info,
             }
             if dto.image_object:
                 payload["image_object"] = dto.image_object
