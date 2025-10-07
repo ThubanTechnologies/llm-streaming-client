@@ -137,42 +137,46 @@ class LLMStreamingClient:
 
     def send_messages_via_socket(
         self,
-        messages: List[Dict[str, Any]],
-        llm: Optional[str] = "openai",
-        model: Optional[str] = "gpt-4o-mini",
+        text: str,
+        action_key: ActionKeys = "default",
+        llm: Optional[str] = "google",
+        model: Optional[str] = "gemini-2.5-flash-lite",
         language: Optional[LanguageEnum] = LanguageEnum.SPANISH,
-        action_key: Optional[ActionKeys] = ActionKeys.DEFAULT,
         prompt: Optional[PromptTemplate] = None,
         image_object: Optional[Any] = None,
+        session_id: Optional[str] = None,
+        context_info: Optional[str] = None,
+        on_token: Optional[Callable[[str, bool], None]] = None,
     ) -> None:
         """
-        Sends messages to the Socket.IO server using the socket adapter.
-
+        Send messages to the LLM service via Socket.IO and stream the response tokens.
         Args:
-            messages (list): A list of messages to send.
-            llm (str, optional): The LLM provider name. Defaults to "openai".
-            model (str, optional): The model name. Defaults to "gpt-4o-mini".
-            language (LanguageEnum, optional): The language to use.
-            action_key (ActionKeys, optional): The action key for the request.
-            prompt (PromptTemplate, optional): The prompt template.
-            image_object (Any, optional): Optional image object for the request.
+            text: The input text to send.
+            action_key: The action key to determine the type of request (default: "default").
+            llm: The name of the LLM to use (default: "openai").
+            model: The name of the model to use (default: "gpt-4o-mini").
+            language: The language of the input text (default: LanguageEnum.SPANISH).
+            prompt: Optional prompt template to use.
+            image_object: Optional image object for the request.
+            session_id: Optional session ID for the request.
+            context_info: Optional context information for the request.
+            on_token: Optional callback function to handle each token received. It should accept two parameters:
+                        the token content (str) and a boolean indicating if the stream is finished.
+        Returns:
+            None
         """
-        imessages: List[IMessage] = [
-            IMessage(
-                id=m["id"],
-                content=m["content"],
-                type=EMessageType(m["type"]),
-                timestamp=m["timestamp"],
-            )
-            for m in messages
-        ]
+
         dto = StreamingInputDTO(
             llm_name=llm,
             model_name=model,
-            messages=imessages,
+            text=text,
             prompt=prompt,
             language=language,
-            action_key=action_key,
+            action_key=(
+                ActionKeys(action_key) if isinstance(action_key, str) else action_key
+            ),
             image_object=image_object,
+            session_id=session_id,
+            context_info=context_info,
         )
-        self.socket_adapter.send_messages(dto)
+        self.socket_adapter.send_messages(dto, on_token=on_token)
