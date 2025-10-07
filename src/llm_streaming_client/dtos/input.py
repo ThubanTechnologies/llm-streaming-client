@@ -16,11 +16,13 @@ class StreamingInputDTO:
 
     llm_name: str
     model_name: str
-    messages: List[IMessage]
+    text: str
     prompt: PromptTemplate
     language: LanguageEnum
     action_key: ActionKeys
+    context_info: Optional[str] = None
     image_object: Optional[str] = None
+    session_id: Optional[str] = None
 
 
 @dataclass
